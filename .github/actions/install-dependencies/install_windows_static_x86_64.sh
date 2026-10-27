@@ -13,9 +13,6 @@ verify_required_env_variables_set
 
 make_build_env_available "7z"
 
-aria2c "https://dl.mumble.info/build/extra/asio_sdk.zip" --out "asio_sdk.zip"
-extract_with_progress "asio_sdk.zip" "${GITHUB_WORKSPACE}/3rdparty/asio"
-
 aria2c "https://dl.mumble.info/build/extra/g15_sdk.zip" --out "g15_sdk.zip"
 extract_with_progress "g15_sdk.zip" "g15_sdk"
 mv "g15_sdk/LCDSDK" "${GITHUB_WORKSPACE}/3rdparty/g15"
