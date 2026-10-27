@@ -1,0 +1,64 @@
+name: Sidecar compile
+
+# Fast check for the screen-share sidecar. It compiles and links the sidecar
+# sources directly, without the full client build or its dependencies, and
+# reports every failing file in one run.
+
+on:
+  push:
+    paths:
+      - 'src/sidecar/**'
+      - '.github/workflows/sidecar-compile.yml'
+  workflow_dispatch:
+
+jobs:
+  compile:
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [cl, clang-cl]
+
+    runs-on: windows-2025
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile and link the sidecar with ${{ matrix.compiler }}
+        shell: pwsh
+        env:
+          COMPILER: ${{ matrix.compiler }}
+        run: |
+          $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+          $vs = & $vswhere -latest -products * -property installationPath
+          $vcvars = Join-Path $vs 'VC\Auxiliary\Build\vcvars64.bat'
+          cmd /c "`"$vcvars`" >nul && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') {
+              Set-Item -Path "env:$($matches[1])" -Value $matches[2] -ErrorAction SilentlyContinue
+            }
+          }
+
+          $out = Join-Path $env:RUNNER_TEMP 'sidecar-obj'
+          New-Item -ItemType Directory -Force $out | Out-Null
+
+          $flags = @('/nologo', '/std:c++20', '/EHsc', '/W4', '/WX', '/DWIN32_LEAN_AND_MEAN', '/DNOMINMAX')
+          $failed = @()
+          $objects = @()
+          foreach ($source in Get-ChildItem src/sidecar -Filter *.cpp) {
+            $object = Join-Path $out ($source.BaseName + '.obj')
+            & $env:COMPILER @flags "/Fo$object" /c $source.FullName
+            if ($LASTEXITCODE -ne 0) {
+              $failed += $source.Name
+            } else {
+              $objects += $object
+            }
+          }
+
+          if ($failed.Count -eq 0) {
+            & link /nologo "/OUT:$(Join-Path $out 'mumble-screenshare.exe')" @objects advapi32.lib
+            if ($LASTEXITCODE -ne 0) { $failed += 'link' }
+          }
+
+          if ($failed.Count -gt 0) {
+            Write-Host "::error::Failed for ${env:COMPILER}: $($failed -join ', ')"
+            exit 1
+          }
