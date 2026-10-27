@@ -149,6 +149,13 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
    runs; ASan/TSan builds; IPC fault injection; game-performance comparison with
    and without the sidecar running.
 
+### Current status (2026-10-27)
+
+- **Phase 0:** decisions written up. D1 (SFU) and D3 (token minting) await owner approval.
+- **Phase 1:** in progress. Sidecar target and WebRTC grep gate are done and build on Windows. Voice baseline not yet recorded (needs a running client).
+- **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Still to do: Mumble client-side pipe connection, framing and queue tests, sidecar death detection and capped reconnect check, IPC GitHub issue.
+- **Phases 3–8:** not started. Phase 3 waits on D3 and Phase 4 waits on D1.
+
 ## 9. How to resume this work
 
 1. Read this document, then `AGENTS.md`, `COMMIT_GUIDELINES.md` and
