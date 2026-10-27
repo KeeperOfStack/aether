@@ -102,10 +102,6 @@
 
 
 #define AUDIO_BACKEND_SETTINGS                                        \
-	PROCESS(audio_backend, ASIO_ENABLE_KEY, bASIOEnable)              \
-	PROCESS(audio_backend, ASIO_CLASS_KEY, qsASIOclass)               \
-	PROCESS(audio_backend, ASIO_MICROPHONE_KEY, qlASIOmic)            \
-	PROCESS(audio_backend, ASIO_SPEAKER_KEY, qlASIOspeaker)           \
 	PROCESS(audio_backend, WASAPI_INPUT_KEY, qsWASAPIInput)           \
 	PROCESS(audio_backend, WASAPI_OUTPUT_KEY, qsWASAPIOutput)         \
 	PROCESS(audio_backend, WASAPI_ROLE_KEY, qsWASAPIRole)             \

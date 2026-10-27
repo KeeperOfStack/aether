@@ -309,11 +309,6 @@ struct Settings {
 	int iPortAudioInput        = -1; // default device
 	int iPortAudioOutput       = -1; // default device
 
-	bool bASIOEnable                = true;
-	QString qsASIOclass             = {};
-	QList< QVariant > qlASIOmic     = {};
-	QList< QVariant > qlASIOspeaker = {};
-
 	QString qsCoreAudioInput  = {};
 	QString qsCoreAudioOutput = {};
 

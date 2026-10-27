@@ -868,11 +868,6 @@ void Settings::legacyLoad(const QString &path) {
 	LOAD(iJitterBufferSize, "net/jitterbuffer");
 	LOAD(iFramesPerPacket, "net/framesperpacket");
 
-	LOAD(bASIOEnable, "asio/enable");
-	LOAD(qsASIOclass, "asio/class");
-	LOAD(qlASIOmic, "asio/mic");
-	LOAD(qlASIOspeaker, "asio/speaker");
-
 	LOAD(qsWASAPIInput, "wasapi/input");
 	LOAD(qsWASAPIOutput, "wasapi/output");
 	LOAD(qsWASAPIRole, "wasapi/role");

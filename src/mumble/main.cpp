@@ -821,7 +821,7 @@ int main(int argc, char **argv) {
 
 #ifdef Q_OS_WIN
 	// Set mumble_mw_hwnd in os_win.cpp.
-	// Used in ASIOInput and GlobalShortcut_win by APIs that require a HWND.
+	// Used in GlobalShortcut_win by APIs that require a HWND.
 	mumble_mw_hwnd = reinterpret_cast< HWND >(Global::get().mw->winId());
 #endif
 

@@ -14,11 +14,6 @@ An example would be `cmake -Dtests=ON ..`.
 Build support for ALSA.
 (Default: ON)
 
-### asio
-
-Build support for ASIO audio input.
-(Default: OFF)
-
 ### benchmarks
 
 Build benchmarks

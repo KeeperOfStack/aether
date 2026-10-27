@@ -35,7 +35,6 @@ option(plugin-debug "Build Mumble with debug output for plugin developers." OFF)
 option(plugin-callback-debug "Build Mumble with debug output for plugin callbacks inside of Mumble." OFF)
 
 if(WIN32)
-	option(asio "Build support for ASIO audio input." OFF)
 	option(wasapi "Build support for WASAPI." ON)
 	option(xboxinput "Build support for global shortcuts from Xbox controllers via the XInput DLL." ON)
 	option(gkey "Build support for Logitech G-Keys. Note: This feature does not require any build-time dependencies, and requires Logitech Gaming Software to be installed to have any effect at runtime." ON)
@@ -991,27 +990,6 @@ if(alsa)
 
 	target_compile_definitions(mumble_client_lib PUBLIC "USE_ALSA")
 	target_link_libraries(mumble_client_lib PUBLIC ALSA::ALSA)
-endif()
-
-if(asio)
-	if(NOT ASIO_DIR)
-		set(ASIO_DIR "${3RDPARTY_DIR}/asio")
-	endif()
-
-	target_sources(mumble_client_lib
-		PRIVATE
-			"ASIOInput.cpp"
-			"ASIOInput.h"
-			"ASIOInput.ui"
-	)
-
-	target_compile_definitions(mumble_client_lib PUBLIC "USE_ASIO")
-	target_include_directories(mumble_client_lib
-		SYSTEM PUBLIC
-			"${ASIO_DIR}/common"
-			"${ASIO_DIR}/host"
-			"${ASIO_DIR}/host/pc"
-	)
 endif()
 
 if(coreaudio)

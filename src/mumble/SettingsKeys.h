@@ -113,12 +113,6 @@ const SettingsKey CONNECTION_TIMEOUT_KEY            = { "connection_timeout" };
 const SettingsKey FORCE_UDP_BIND_TO_TCP_ADDRESS_KEY = { "force_udp_bind_to_tcp_address" };
 const SettingsKey SSL_CIPHERS_KEY                   = { "ssl_ciphers" };
 
-// ASIO
-const SettingsKey ASIO_ENABLE_KEY     = { "enable_asio" };
-const SettingsKey ASIO_CLASS_KEY      = { "asio_class" };
-const SettingsKey ASIO_MICROPHONE_KEY = { "asio_microphone" };
-const SettingsKey ASIO_SPEAKER_KEY    = { "asio_speaker" };
-
 // WASAPI
 const SettingsKey WASAPI_INPUT_KEY  = { "wasapi_input" };
 const SettingsKey WASAPI_OUTPUT_KEY = { "wasapi_output" };
