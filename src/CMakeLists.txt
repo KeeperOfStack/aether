@@ -8,6 +8,8 @@ set(UDP_PROTO_FILE "${CMAKE_CURRENT_SOURCE_DIR}/MumbleUDP.proto")
 
 option(benchmarks "Build benchmarks" OFF)
 
+option(sidecar "Build the screen-share sidecar (mumble-screenshare)." OFF)
+
 option(qssldiffiehellmanparameters "Build support for custom Diffie-Hellman parameters." ON)
 
 option(zeroconf "Build support for zeroconf (mDNS/DNS-SD)." ON)
@@ -242,6 +244,10 @@ endif()
 
 if(benchmarks)
 	add_subdirectory(benchmarks)
+endif()
+
+if(sidecar)
+	add_subdirectory(sidecar)
 endif()
 
 # Apply our compiler flags to all targets defined in this directory tree, excluding
