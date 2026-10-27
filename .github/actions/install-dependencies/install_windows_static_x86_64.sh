@@ -13,11 +13,6 @@ verify_required_env_variables_set
 
 make_build_env_available "7z"
 
-aria2c "https://dl.mumble.info/build/extra/g15_sdk.zip" --out "g15_sdk.zip"
-extract_with_progress "g15_sdk.zip" "g15_sdk"
-mv "g15_sdk/LCDSDK" "${GITHUB_WORKSPACE}/3rdparty/g15"
-rm -rf "g15_sdk"
-
 aria2c "https://github.com/oleg-shilo/wixsharp/releases/download/v1.19.0.0/WixSharp.1.19.0.0.7z" --out "WixSharp.7z"
 extract_with_progress "WixSharp.7z" "C:/WixSharp"
 
