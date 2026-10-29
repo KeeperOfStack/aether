@@ -6,6 +6,7 @@
 #ifndef MUMBLE_SIDECAR_IPCBRIDGE_H_
 #define MUMBLE_SIDECAR_IPCBRIDGE_H_
 
+#include "IpcProtocol.h"
 #include "IpcQueue.h"
 
 #include <cstddef>
