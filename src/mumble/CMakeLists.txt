@@ -599,8 +599,11 @@ if(WIN32)
 		"WinGUIDs.cpp"
 		"os_early_win.cpp"
 		"os_win.cpp"
+		"SidecarClient.cpp"
+		"SidecarClient.h"
 
 		"${CMAKE_SOURCE_DIR}/overlay/ods.cpp"
+		"${CMAKE_SOURCE_DIR}/src/sidecar/IpcProtocol.cpp"
 	)
 
 	# WinGUIDs.cpp includes initguid.h which causes a macro definition in guiddef.h to be

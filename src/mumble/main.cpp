@@ -26,6 +26,9 @@
 #ifdef USE_DBUS
 #	include "DBus.h"
 #endif
+#ifdef Q_OS_WIN
+#	include "SidecarClient.h"
+#endif
 #ifdef USE_VLD
 #	include "vld.h"
 #endif
@@ -790,6 +793,11 @@ int main(int argc, char **argv) {
 	if (!options.startHiddenInTray) {
 		Global::get().mw->showRaiseWindow();
 	}
+
+#ifdef Q_OS_WIN
+	// Connects to mumble-screenshare.exe if it is running. Voice does not depend on it.
+	Global::get().sidecar = new SidecarClient();
+#endif
 
 	Global::get().talkingUI = new TalkingUI();
 

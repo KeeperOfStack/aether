@@ -29,6 +29,7 @@ class QSettings;
 class Overlay;
 class LCD;
 class Zeroconf;
+class SidecarClient;
 class OverlayClient;
 class DeveloperConsole;
 class TalkingUI;
@@ -66,6 +67,9 @@ public:
 #endif
 	LCD *lcd;
 	Zeroconf *zeroconf;
+#ifdef Q_OS_WIN
+	SidecarClient *sidecar;
+#endif
 	QNetworkAccessManager *nam;
 	DeveloperConsole *c;
 	TalkingUI *talkingUI;
