@@ -23,6 +23,15 @@ enum class MessageType : std::uint8_t {
 	Event      = 4,
 };
 
+enum class ShareCommand : std::uint8_t {
+	Off = 0,
+	On  = 1,
+};
+
+enum class EventCode : std::uint8_t {
+	Ready = 1,
+};
+
 bool isKnownMessageType(std::uint8_t type);
 
 // A declared payload length is only trusted when it is non-zero and within the limit.

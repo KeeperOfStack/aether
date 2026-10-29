@@ -14,15 +14,6 @@
 
 namespace sidecar::ipc {
 
-enum class ShareCommand : std::uint8_t {
-	Off = 0,
-	On  = 1,
-};
-
-enum class EventCode : std::uint8_t {
-	Ready = 1,
-};
-
 // Serves one client at a time over a named pipe. All pipe I/O runs on a
 // thread owned by this object. Other threads only call the public methods,
 // which never touch the pipe.
