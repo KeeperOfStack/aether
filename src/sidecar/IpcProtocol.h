@@ -32,6 +32,12 @@ enum class EventCode : std::uint8_t {
 	Ready = 1,
 };
 
+constexpr int InitialBackoffMs = 1000;
+constexpr int MaxBackoffMs     = 30000;
+
+// Delay before the next reconnect attempt, doubling up to MaxBackoffMs.
+int nextBackoffMs(int currentMs);
+
 bool isKnownMessageType(std::uint8_t type);
 
 // A declared payload length is only trusted when it is non-zero and within the limit.

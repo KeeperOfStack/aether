@@ -13,12 +13,13 @@
 #include <QtCore/QDebug>
 #include <QtNetwork/QLocalSocket>
 
-#include <algorithm>
 #include <cstdint>
 
 using sidecar::ipc::EventCode;
+using sidecar::ipc::InitialBackoffMs;
 using sidecar::ipc::LengthPrefixSize;
 using sidecar::ipc::MessageType;
+using sidecar::ipc::nextBackoffMs;
 using sidecar::ipc::ProtocolVersion;
 using sidecar::ipc::ShareCommand;
 
@@ -26,9 +27,6 @@ namespace {
 
 // Qt adds the \\.\pipe\ prefix on Windows.
 const char *const PipeName = "mumble-sidecar-ipc";
-
-constexpr int InitialBackoffMs = 1000;
-constexpr int MaxBackoffMs     = 30000;
 
 } // namespace
 
@@ -176,5 +174,5 @@ void SidecarClient::scheduleReconnect() {
 	}
 
 	m_reconnectTimer.start(m_backoffMs);
-	m_backoffMs = std::min(m_backoffMs * 2, MaxBackoffMs);
+	m_backoffMs = nextBackoffMs(m_backoffMs);
 }

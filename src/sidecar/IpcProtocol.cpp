@@ -5,6 +5,8 @@
 
 #include "IpcProtocol.h"
 
+#include <algorithm>
+
 namespace sidecar::ipc {
 
 bool isKnownMessageType(std::uint8_t type) {
@@ -16,6 +18,10 @@ bool isKnownMessageType(std::uint8_t type) {
 			return true;
 	}
 	return false;
+}
+
+int nextBackoffMs(int currentMs) {
+	return std::min(currentMs * 2, MaxBackoffMs);
 }
 
 bool isValidPayloadLength(std::uint32_t length) {

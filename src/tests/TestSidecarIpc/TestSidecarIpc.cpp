@@ -21,6 +21,7 @@ private slots:
 	void dropOldestKeepsOrder();
 	void dropOldestCountsDrops();
 	void latestValueReportsChanges();
+	void backoffDoublesAndCaps();
 };
 
 void TestSidecarIpc::lengthIsLittleEndian() {
@@ -106,6 +107,26 @@ void TestSidecarIpc::latestValueReportsChanges() {
 	QVERIFY(latest.takeIfChanged(command, seen));
 	QCOMPARE(command, ShareCommand::On);
 	QVERIFY(!latest.takeIfChanged(command, seen));
+}
+
+void TestSidecarIpc::backoffDoublesAndCaps() {
+	int delay = InitialBackoffMs;
+	QCOMPARE(delay, 1000);
+
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, 2000);
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, 4000);
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, 8000);
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, 16000);
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, MaxBackoffMs);
+
+	// Once at the cap, further failures keep the delay there.
+	delay = nextBackoffMs(delay);
+	QCOMPARE(delay, MaxBackoffMs);
 }
 
 QTEST_GUILESS_MAIN(TestSidecarIpc)
