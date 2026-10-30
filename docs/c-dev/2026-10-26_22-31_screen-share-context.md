@@ -153,7 +153,8 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
 
 - **Phase 0:** decisions written up. D1 (SFU) and D3 (token minting) await owner approval.
 - **Phase 1:** in progress. Sidecar target and WebRTC grep gate are done and build on Windows. Voice baseline not yet recorded (needs a running client).
-- **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Client-side pipe connection (`SidecarClient`) is on `master`. Framing and queue tests (`src/tests/TestSidecarIpc`) are on `master` and pass in CI. The reconnect backoff (1 s doubling to 30 s) is shared in `IpcProtocol` and tested. Still to do: a runtime check of sidecar death and reconnect with a real client, IPC GitHub issue.
+- **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Client-side pipe connection (`SidecarClient`) is on `master`. Framing and queue tests (`src/tests/TestSidecarIpc`) are on `master` and pass in CI. The reconnect backoff (1 s doubling to 30 s) is shared in `IpcProtocol` and tested. Still to do: voice with the helper killed mid-call (Phase 1 step 5), IPC GitHub issue.
+- **Manual test run (2026-10-30):** build `efd1b8a6c` on Windows, client connected to a local Murmur on port 61000. The default port 64738 is inside a Windows-reserved range on this machine, so the server was started by hand with an ini file setting `port=61000`. That is not an installed config change and does not survive a reboot. Passed: helper connects, disconnect is logged, reconnect after restart (about 15 s while it was down). Pending: voice with a second client while the helper is killed; Mumble with no helper running.
 - **Phases 3–8:** not started. Phase 3 waits on D3 and Phase 4 waits on D1.
 
 ## 9. How to resume this work
