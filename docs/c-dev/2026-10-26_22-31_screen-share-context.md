@@ -154,7 +154,7 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
 - **Phase 0:** decisions written up. D1 (SFU) and D3 (token minting) await owner approval.
 - **Phase 1:** in progress. Sidecar target and WebRTC grep gate are done and build on Windows. Voice baseline not yet recorded (needs a running client).
 - **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Client-side pipe connection (`SidecarClient`) is on `master`. Framing and queue tests (`src/tests/TestSidecarIpc`) are on `master` and pass in CI. The reconnect backoff (1 s doubling to 30 s) is shared in `IpcProtocol` and tested. Still to do: voice with the helper killed mid-call (Phase 1 step 5), IPC GitHub issue.
-- **Manual test run (2026-10-30):** build `efd1b8a6c` on Windows, client connected to a local Murmur on port 61000. The default port 64738 is inside a Windows-reserved range on this machine, so the server was started by hand with an ini file setting `port=61000`. That is not an installed config change and does not survive a reboot. Passed: helper connects, disconnect is logged, reconnect after restart (about 15 s while it was down). Pending: voice with a second client while the helper is killed; Mumble with no helper running.
+- **Manual test run (2026-10-30):** build `efd1b8a6c` on Windows, client connected to a local Murmur on port 61000. The default port 64738 is inside a Windows-reserved range on this machine, so the server was started with an ini file setting `port=61000` (see section 10). That is not an installed config change. Passed: helper connects, disconnect is logged, reconnect after restart (about 15 s while it was down). Pending: voice with a second client while the helper is killed; Mumble with no helper running.
 - **Phases 3–8:** not started. Phase 3 waits on D3 and Phase 4 waits on D1.
 
 ## 9. How to resume this work
@@ -164,3 +164,26 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
 2. Check the open items in section 7 and ask the owner which are still open.
 3. Push, open PRs or create issues only when the owner asks for it.
 4. Never introduce WebRTC or capture headers into `src/mumble/`.
+
+## 10. Local test server (port 61000)
+
+The Windows test machine reserves TCP port 64738 (inside 64698–64797), so the
+default Murmur port fails with "The address is protected". Run the server on
+61000 instead. No code change or new build is needed: Murmur reads its port
+from an ini file, and the port default in `src/Net.h` is only used when no ini
+sets one.
+
+- **Ini file:** `%LOCALAPPDATA%\Mumble\Murmur\murmur-61000.ini`, containing
+  `port=61000` and a `logfile=` path to `mumble-server.log`. This is outside
+  the repo.
+- **Start command:**
+  `"C:\Program Files\Mumble\server\mumble-server.exe" -i "%LOCALAPPDATA%\Mumble\Murmur\murmur-61000.ini"`
+- **Autostart:** a Startup-folder shortcut "Mumble Server 61000" runs the
+  command above minimised at logon. It was created on 2026-10-30. Delete it
+  from `shell:startup` to stop autostart.
+- **Client:** add the server as `localhost` (or the machine name) with port 61000.
+- **Caveat:** the default server still tries 64738 at start and stops with
+  "address is protected". The 61000 instance keeps running.
+- **Revisit when:** the reserved range moves. Check with
+  `netsh interface ipv4 show excludedportrange protocol=tcp`. Once 64738 is
+  free, the default port works again and the ini and shortcut can go.
