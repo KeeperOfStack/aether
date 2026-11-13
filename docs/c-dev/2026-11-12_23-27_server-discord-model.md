@@ -93,19 +93,31 @@ is verified by a test or a manual run before the next starts.
 
 The earlier phases 3 and 4 map onto steps 4 and 5 here.
 
-## 6. Open items (owner answers needed)
+## 6. Open items and owner answers
 
-- **O1.** Is the "one voice channel" problem a configuration or client limit,
-  or does Murmur itself refuse more channels? Confirm by running it, or point
-  us to what you saw.
-- **O2.** Roles: should roles be Murmur groups, or a new role concept layered
-  on top of them?
-- **O3.** Text history: should text channels keep history on the server, and
-  for how long? This affects storage and privacy.
-- **O4.** SFU: re-approve LiveKit for per-channel rooms, or choose another
-  option? The C++ client SDK maintenance check is still open.
-- **O5.** Scale target: how many channels and members per server should the
-  first version support?
+- **O1. Answered: not seen in the client.** The client shows "Add channel" only
+  when the user has `Write` or `MakeChannel` permission on the parent channel
+  (`src/mumble/MainWindow.cpp:2697`). The likely cause is that the test user is
+  not an admin, so the option is hidden. **To confirm:** log in as the server
+  admin and check for the option. If it is there, the limit is in permissions,
+  not the server.
+- **O2. Answered: the owner will look at existing Discord-style CSS or themes.**
+  Open point: the Mumble client is a Qt (C++) desktop app, not HTML/CSS, so
+  CSS cannot be used directly. Discord's own CSS, assets and code are its
+  property and must not be copied. The practical route is our own Qt theme that
+  copies the layout and feel, and not Discord's files. Roles (groups or a new
+  role concept) are still open.
+- **O3. Answered: keep history indefinitely, with an admin option to clear older
+  messages.** Admin clear needs a permission of its own. Storage and privacy
+  effects are still to be sized.
+- **O4. Open: LiveKit.** Explained to the owner on 2026-11-12. Screen share is a
+  per-channel video stream. LiveKit is a separate media server that receives
+  each sharer's screen and forwards it to the others in the same voice channel.
+  Voice stays on Murmur. The owner has not yet approved LiveKit for this model.
+  The C++ client SDK maintenance check is still open.
+- **O5. Answered: no fixed limit.** Users can create as many text and voice
+  channels as they want. A practical ceiling for performance and storage still
+  needs a test later.
 
 ## 7. How to resume
 
