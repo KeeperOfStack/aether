@@ -87,6 +87,11 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
 
 ## 5. Decisions (recommended, awaiting owner approval)
 
+> **Update 2026-11-12:** D1 and D3 were approved in revised form: Discord-style
+> servers with many text and voice channels, and Discord-style layered
+> permissions. See `2026-11-12_23-27_server-discord-model.md`, which supersedes
+> the server assumptions in sections 4 and 5 of this document.
+
 | # | Topic | Decision | Why |
 |---|-------|----------|-----|
 | D1 | SFU | **LiveKit**, self-hosted, behind an `IMediaTransport` adapter so it can be swapped | Handles TURN, simulcast and bandwidth estimation; Mediasoup needs a Node runtime on the server. **Verify the C++ client SDK is maintained before committing**; fallback is LiveKit's signalling protocol directly. |
