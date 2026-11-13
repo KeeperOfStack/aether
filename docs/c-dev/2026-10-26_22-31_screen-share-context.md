@@ -126,6 +126,8 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
   prefers them.
 - Owner approval of the server change in D3 (token minting).
 - Verify D10 (existing DSCP values) and the D3 relay behaviour in Murmur.
+  - **D10 checked (2026-11-12):** `src/Connection.cpp` does not set EF or any explicit DSCP for voice on Windows. It adds the socket to a QoS flow with `QOSTrafficTypeAudioVideo` (`setToS`, line 67). On Unix it sets TOS `0xa0` (DSCP CS5), falling back to `0x60`. Loopback peers are skipped. The spec's "EF" claim is wrong. The Windows DSCP value is decided by the OS QoS policy and is not verified here; it needs a Wireshark capture.
+  - **D3 relay checked (2026-11-12):** `Server::msgPluginDataTransmission` (`src/murmur/Messages.cpp:2546`) relays a message to each listed receiver session that is authenticated. It overwrites the sender session, rate-limits the sender, caps payload and receiver counts, and drops duplicates. **It does not check ACLs or channel membership**, so any authenticated client can send to any session ID. The token-minting server change in D3 is therefore still needed for permission checks.
 - Decide the installer approach (section 6, item 4).
 
 ## 8. Planned phases
@@ -152,8 +154,8 @@ Mumble client (voice, Qt)  --- named pipe IPC --->  mumble-screenshare.exe (side
 ### Current status (2026-10-27)
 
 - **Phase 0:** decisions written up. D1 (SFU) and D3 (token minting) await owner approval.
-- **Phase 1:** in progress. Sidecar target and WebRTC grep gate are done and build on Windows. Voice baseline not yet recorded (needs a running client).
-- **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Client-side pipe connection (`SidecarClient`) is on `master`. Framing and queue tests (`src/tests/TestSidecarIpc`) are on `master` and pass in CI. The reconnect backoff (1 s doubling to 30 s) is shared in `IpcProtocol` and tested. Still to do: IPC GitHub issue.
+- **Phase 1:** in progress. Sidecar target and WebRTC grep gate are done and build on Windows. Voice continuity under helper stop and start passed on 2026-11-12 (see the manual test run below). A formal baseline with numbers is still not recorded.
+- **Phase 2:** in progress. Server-side IPC framing, queues and named-pipe server are on `master`. Client-side pipe connection (`SidecarClient`) is on `master`. Framing and queue tests (`src/tests/TestSidecarIpc`) are on `master` and pass in CI. The reconnect backoff (1 s doubling to 30 s) is shared in `IpcProtocol` and tested. The IPC GitHub issue has not been created: the fork has Issues disabled (checked 2026-11-12 with `gh`). No issue exists, so there is nothing to remove.
 - **Manual test run (2026-10-30):** build `efd1b8a6c` on Windows, client connected to a local Murmur on port 61000. The default port 64738 is inside a Windows-reserved range on this machine, so the server was started with an ini file setting `port=61000` (see section 10). That is not an installed config change. Passed: helper connects, disconnect is logged, reconnect after restart (about 15 s while it was down). Passed (2026-11-12): voice continued while the helper was stopped at 20:44:05 (no disconnects in the server log). The second PC ran Mumble with no helper and stayed connected.
 - **Phases 3–8:** not started. Phase 3 waits on D3 and Phase 4 waits on D1.
 
